@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>TMJRock - Live AJAX Examples</title>
+    <script src="../src/tmjrock.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .section {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f1f8ff;
+            border: 1px solid #c8e1ff;
+            border-radius: 4px;
+            min-height: 20px;
+            color: #0366d6;
+            font-family: monospace;
+        }
+
+        .error {
+            color: #d73a49;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        select {
+            padding: 6px;
+            margin: 5px 0 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #004494;
+        }
+
+        .code-preview {
+            background: #2d2d2d;
+            color: #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 13px;
+            margin-top: 15px;
+            overflow-x: auto;
+        }
+
+        .keyword {
+            color: #cc99cd;
+        }
+
+        /* simple syntax highlighting */
+        .string {
+            color: #7ec699;
+        }
+    </style>
+    <script>
+        const API_URL = "https://699af3fa377ac05ce28f181c.mockapi.io/designation";
+
+        // Scenario 1: POST Request (sendJSON = true)
+        function saveDesignationJSON() {
+            var resultBox = $$$('dataJSON');
+            resultBox.html('Saving to database...');
+            var newDesignation = { "title": $$$('newTitle1').value() };
+
+            $$$.ajax({
+                "url": API_URL,
+                "methodType": "POST",
+                "data": newDesignation,
+                "sendJSON": true,
+                "success": function (responseData) {
+                    var response = JSON.parse(responseData);
+                    var generatedCode = response.code || response.id;
+                    resultBox.html("Success! Saved as JSON -> Code: " + generatedCode + " | Title: " + response.title);
+                    $$$('newTitle1').value('');
+                },
+                "failure": function () { alert('Failed to save JSON.'); }
+            });
+        }
+
+        // Scenario 2: GET Request (Fetch All)
+        function populateDesignations() {
+            var designationCombo = document.getElementById("designationCode");
+            designationCombo.innerHTML = "<option>Loading...</option>";
+
+            $$$.ajax({
+                "url": API_URL,
+                "methodType": "GET",
+                "success": function (responseData) {
+                    var designations = JSON.parse(responseData);
+                    designationCombo.innerHTML = "";
+                    if (designations.length === 0) {
+                        designationCombo.innerHTML = "<option>No designations found in database.</option>";
+                        return;
+                    }
+                    for (var i = 0; i < designations.length; i++) {
+                        var obj = document.createElement("option");
+                        obj.value = designations[i].code;
+                        obj.text = designations[i].title + " (" + designations[i].code + ")";
+                        designationCombo.appendChild(obj);
+                    }
+                },
+                "failure": function () { alert("Failed to fetch from MockAPI."); }
+            });
+        }
+
+        // Scenario 3: GET Request (Fetch By Code using Query String)
+        function getDesignation() {
+            let resultBox = $$$("titleResult");
+            resultBox.html("Searching database...");
+            let targetCode = $$$("searchCode").value();
+
+            $$$.ajax({
+                "url": API_URL,
+                "data": { "code": targetCode },
+                "methodType": "GET",
+                "success": function (responseData) {
+                    var matches = JSON.parse(responseData);
+                    if (matches.length === 0) {
+                        resultBox.html("<span class='error'>Error: Designation code '" + targetCode + "' not found.</span>");
+                    } else {
+                        resultBox.html("<span class='success'>Found: " + matches[0].title + "</span>");
+                    }
+                },
+                "failure": function () { alert("Search failed."); }
+            });
+        }
+
+        // Scenario 4: POST Request (sendJSON = false)
+        function saveDesignationForm() {
+            var resultBox = $$$('dataForm');
+            resultBox.html('Saving to database...');
+            var newDesignation = { "title": $$$('newTitle2').value() };
+
+            $$$.ajax({
+                "url": API_URL,
+                "methodType": "POST",
+                "data": newDesignation,
+                "sendJSON": false,
+                "success": function (responseData) {
+                    var response = JSON.parse(responseData);
+                    var generatedCode = response.code || response.id;
+                    resultBox.html("Success! Saved as Form Data -> Code: " + generatedCode + " | Title: " + response.title);
+                    $$$('newTitle2').value('');
+                },
+                "failure": function () { alert('Failed to save Form Data.'); }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="tmj-navbar">
+        <a href="../index.html">Home</a>
+        <a href="ajax-example.html" class="active">AJAX</a>
+        <a href="modal-example.html">Modal</a>
+        <a href="accordion-example.html">Accordion</a>
+        <a href="fillcombo-example.html">fillComboBox</a>
+    </div>
+    <h1>TMJRock Live AJAX Testing</h1>
+    <p>This page tests the <code>$$$.ajax</code> component against a live MockAPI database.</p>
+
+    <div class="section">
+        <h3>1. Create Designation (POST via JSON)</h3>
+        <label>Title:</label> <input type='text' id='newTitle1' placeholder="e.g., Software Engineer"><br>
+        <button type='button' onclick='saveDesignationJSON()'>Save Designation</button>
+        <div id='dataJSON' class="result-box">Waiting for action...</div>
+        <div class="code-preview">
+            $$$.ajax({<br>
+            &nbsp;&nbsp;<span class="string">"methodType"</span>: <span class="string">"POST"</span>,<br>
+            &nbsp;&nbsp;<span class="string">"data"</span>: { title: <span class="string">"Software Engineer"</span>
+            },<br>
+            &nbsp;&nbsp;<span class="string">"sendJSON"</span>: <span class="keyword">true</span>,<br>
+            &nbsp;&nbsp;<span class="string">"success"</span>: function(response) { ... },<br>
+            &nbsp;&nbsp;<span class="string">"failure"</span>: function() { alert('Error!'); }<br>
+            });
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>2. Fetch All Designations (GET)</h3>
+        <button type="button" onclick="populateDesignations()">Refresh Dropdown</button>
+        <br><br>
+        <select id="designationCode">
+            <option>Click refresh to load from DB...</option>
+        </select>
+        <div class="code-preview">
+            $$$.ajax({<br>
+            &nbsp;&nbsp;<span class="string">"methodType"</span>: <span class="string">"GET"</span>,<br>
+            &nbsp;&nbsp;<span class="string">"success"</span>: function(response) { <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">var</span> data = JSON.parse(response);<br>
+            &nbsp;&nbsp;},<br>
+            &nbsp;&nbsp;<span class="string">"failure"</span>: function() { alert('Error!'); }<br>
+            });
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>3. Search Designation by Code (GET with Query)</h3>
+        <label>Enter Code to Search:</label>
+        <input type="text" id="searchCode" placeholder="1">
+        <button type="button" onclick="getDesignation()">Search</button>
+        <div id="titleResult" class="result-box">Waiting for action...</div>
+        <div class="code-preview">
+            $$$.ajax({<br>
+            &nbsp;&nbsp;<span class="string">"data"</span>: { <span class="string">"code"</span>: targetCode }, <span
+                class="keyword">// Converts to ?code=123</span><br>
+            &nbsp;&nbsp;<span class="string">"methodType"</span>: <span class="string">"GET"</span>,<br>
+            &nbsp;&nbsp;<span class="string">"success"</span>: function(response) { ... },<br>
+            &nbsp;&nbsp;<span class="string">"failure"</span>: function() { alert('Error!'); }<br>
+            });
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>4. Create Designation (POST via Form Data)</h3>
+        <label>Title:</label> <input type='text' id='newTitle2' placeholder="e.g., QA Tester"><br>
+        <button type='button' onclick='saveDesignationForm()'>Save Designation</button>
+        <div id='dataForm' class="result-box">Waiting for action...</div>
+        <div class="code-preview">
+            $$$.ajax({<br>
+            &nbsp;&nbsp;<span class="string">"methodType"</span>: <span class="string">"POST"</span>,<br>
+            &nbsp;&nbsp;<span class="string">"data"</span>: { title: <span class="string">"QA Tester"</span> },<br>
+            &nbsp;&nbsp;<span class="string">"sendJSON"</span>: <span class="keyword">false</span>,<br>
+            &nbsp;&nbsp;<span class="string">"success"</span>: function(response) { ... },<br>
+            &nbsp;&nbsp;<span class="string">"failure"</span>: function() { alert('Error!'); }<br>
+            });
+        </div>
+    </div>
+
+</body>
+
+</html>

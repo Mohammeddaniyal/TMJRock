@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>TMJRock - Accordion Example</title>
+
+    <script src="../src/tmjrock.js"></script>
+    <link rel="stylesheet" href="../src/tmjrock.css">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p.desc {
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        .section {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        div[accordian='true'] {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        div[accordian='true'] h1,
+        div[accordian='true'] h2,
+        div[accordian='true'] h3,
+        div[accordian='true'] h4,
+        div[accordian='true'] h5,
+        div[accordian='true'] h6 {
+            background-color: #0056b3;
+            color: white;
+            margin: 0;
+            padding: 12px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #004494;
+            font-size: 16px;
+        }
+
+        div[accordian='true'] h1:hover,
+        div[accordian='true'] h2:hover,
+        div[accordian='true'] h3:hover,
+        div[accordian='true'] h4:hover,
+        div[accordian='true'] h5:hover,
+        div[accordian='true'] h6:hover {
+            background-color: #004494;
+        }
+
+        div[accordian='true']>div {
+            padding: 15px;
+            background-color: #fff;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            line-height: 1.5;
+        }
+
+        .code-preview {
+            background: #2d2d2d;
+            color: #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 13px;
+            margin-top: 20px;
+            overflow-x: auto;
+            line-height: 1.4;
+        }
+
+        .tag {
+            color: #e06c75;
+        }
+
+        .attr {
+            color: #d19a66;
+        }
+
+        .val {
+            color: #98c379;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="tmj-navbar">
+        <a href="../index.html">Home</a>
+        <a href="ajax-example.html">AJAX</a>
+        <a href="modal-example.html">Modal</a>
+        <a href="accordion-example.html" class="active">Accordion</a>
+        <a href="fillcombo-example.html">fillComboBox</a>
+    </div>
+
+    <h1>TMJRock - Accordion Component</h1>
+    <p class="desc">
+        The Accordion component is entirely declarative. You do not need to write any JavaScript to initialize it.
+        Simply add the <code>accordian='true'</code> attribute to a container `div`, and TMJRock will automatically
+        convert the alternating Heading and `div` pairs inside it into an interactive accordion.
+    </p>
+
+    <div class="section">
+        <h3>Example 1: Basic Accordion</h3>
+        <p>Click the headers below to expand the panels. Notice how opening one panel automatically closes the other.
+        </p>
+
+        <div accordian='true'>
+            <h5>Section 1: The Concept</h5>
+            <div>
+                An accordion is a vertically stacked list of items, such as labels or thumbnails. Each item can be
+                "expanded" or "collapsed" to reveal the content associated with that item.
+            </div>
+
+            <h4>Section 2: The Rules</h4>
+            <div>
+                To use TMJRock's accordion, the parent container must have <strong>accordian='true'</strong>.
+                Inside, elements must be strictly paired: a Heading tag (H1-H6) immediately followed by a DIV containing
+                the content.
+            </div>
+
+            <h3>Section 3: Custom Styling</h3>
+            <div>
+                TMJRock handles the JavaScript display logic (none to block). You are completely free to write your own
+                CSS to style the headers and the content boxes exactly how you want them.
+            </div>
+        </div>
+
+        <div class="code-preview">
+            &lt;<span class="tag">div</span> <span class="attr">accordian</span>=<span class="val">'true'</span>&gt;<br>
+            &nbsp;&nbsp;&lt;<span class="tag">h5</span>&gt;Section 1: The Concept&lt;/<span
+                class="tag">h5</span>&gt;<br>
+            &nbsp;&nbsp;&lt;<span class="tag">div</span>&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;An accordion is a vertically stacked list of items...<br>
+            &nbsp;&nbsp;&lt;/<span class="tag">div</span>&gt;<br>
+            <br>
+            &nbsp;&nbsp;&lt;<span class="tag">h4</span>&gt;Section 2: The Rules&lt;/<span class="tag">h4</span>&gt;<br>
+            &nbsp;&nbsp;&lt;<span class="tag">div</span>&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;To use TMJRock's accordion, the parent container must...<br>
+            &nbsp;&nbsp;&lt;/<span class="tag">div</span>&gt;<br>
+            &lt;/<span class="tag">div</span>&gt;
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Example 2: Multiple Accordions</h3>
+        <p>TMJRock supports multiple, independent accordions on the same page. Expanding a panel in this accordion will
+            not affect the one above.</p>
+
+        <div accordian='true'>
+            <h3>Q: Is TMJRock free to use?</h3>
+            <div>
+                Yes! TMJRock is an open-source, lightweight JavaScript utility library designed for educational and
+                personal projects.
+            </div>
+
+            <h3>Q: Do I need jQuery?</h3>
+            <div>
+                No. TMJRock is built entirely with vanilla JavaScript, which means it has zero external dependencies and
+                loads instantly.
+            </div>
+
+            <h3>Q: What if I mess up the HTML structure?</h3>
+            <div>
+                If your heading and div tags are not perfectly paired (e.g., you put two divs in a row), TMJRock's
+                initialization framework will immediately throw a helpful exception in the console:
+                <code>'Heading and division malformed to create accordian'</code>.
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

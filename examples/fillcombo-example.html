@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>TMJRock - fillComboBox Example</title>
+    <script src="../src/tmjrock.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .section {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        select {
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            min-width: 250px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #004494;
+        }
+
+        .code-preview {
+            background: #2d2d2d;
+            color: #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 13px;
+            margin-top: 15px;
+            overflow-x: auto;
+        }
+
+        .keyword {
+            color: #cc99cd;
+        }
+
+        .string {
+            color: #7ec699;
+        }
+    </style>
+    <script>
+        
+        function fillFromLocalArray() {
+            var staticDesignations = [
+                { "code": "1001", "title": "System Administrator" },
+                { "code": "1002", "title": "Network Engineer" },
+                { "code": "1003", "title": "DevOps Specialist" }
+            ];
+
+            $$$("localCombo").fillComboBox({
+                "dataSource": staticDesignations,
+                "text": "title",
+                "value": "code",
+                "firstOption": {
+                    "text": "< Select IT Role >",
+                    "value": "-1"
+                }
+            });
+        }
+
+        
+        function fillFromDatabase() {
+            var btn = document.getElementById("dbBtn");
+            btn.innerText = "Fetching from DB...";
+
+            $$$.ajax({
+                "url": "https://699af3fa377ac05ce28f181c.mockapi.io/designation",
+                "methodType": "GET",
+                "success": function (responseData) {
+                    var designations = JSON.parse(responseData);
+
+                    $$$("dbCombo").fillComboBox({
+                        "dataSource": designations,
+                        "text": "title",
+                        "value": "code",
+                        "firstOption": {
+                            "text": "< Select Designation from DB >",
+                            "value": "-1"
+                        }
+                    });
+
+                    btn.innerText = "Fetch & Fill Combo";
+                },
+                "failure": function () {
+                    alert("Some problem fetching from MockAPI.");
+                    btn.innerText = "Fetch & Fill Combo";
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="tmj-navbar">
+        <a href="../index.html">Home</a>
+        <a href="ajax-example.html">AJAX</a>
+        <a href="modal-example.html">Modal</a>
+        <a href="accordion-example.html">Accordion</a>
+        <a href="fillcombo-example.html" class="active">fillComboBox</a>
+    </div>
+    <h1>TMJRock - fillComboBox Utility</h1>
+    <p>This page demonstrates how the <code>fillComboBox</code> function automatically generates dropdown options from
+        an array of JSON objects.</p>
+
+    <div class="section">
+        <h3>1. Fill using a Local Array</h3>
+        <p>Instantly map an array of JavaScript objects to a dropdown.</p>
+        <button type="button" onclick="fillFromLocalArray()">Fill ComboBox</button>
+        <br>
+        <select id="localCombo">
+            <option>Waiting for action...</option>
+        </select>
+        <div class="code-preview">
+            $$$(<span class="string">"localCombo"</span>).fillComboBox({<br>
+            &nbsp;&nbsp;<span class="string">"dataSource"</span> : staticDesignations,<br>
+            &nbsp;&nbsp;<span class="string">"text"</span> : <span class="string">"title"</span>,<br>
+            &nbsp;&nbsp;<span class="string">"value"</span> : <span class="string">"code"</span>,<br>
+            &nbsp;&nbsp;<span class="string">"firstOption"</span> : {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"text"</span> : <span class="string">"&lt; Select IT Role
+                &gt;"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"value"</span> : <span class="string">"-1"</span><br>
+            &nbsp;&nbsp;}<br>
+            });
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>2. Fill using $$$.ajax (Live Database)</h3>
+        <p>Fetch designations from the live MockAPI database and populate the dropdown.</p>
+        <button type="button" id="dbBtn" onclick="fillFromDatabase()">Fetch & Fill Combo</button>
+        <br>
+        <select id="dbCombo">
+            <option>Waiting for action...</option>
+        </select>
+        <div class="code-preview">
+            $$$(<span class="string">"dbCombo"</span>).fillComboBox({<br>
+            &nbsp;&nbsp;<span class="string">"dataSource"</span> : designationsFromAPI,<br>
+            &nbsp;&nbsp;<span class="string">"text"</span> : <span class="string">"title"</span>,<br>
+            &nbsp;&nbsp;<span class="string">"value"</span> : <span class="string">"code"</span>,<br>
+            &nbsp;&nbsp;<span class="string">"firstOption"</span> : {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"text"</span> : <span class="string">"&lt; Select Designation
+                &gt;"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"value"</span> : <span class="string">"-1"</span><br>
+            &nbsp;&nbsp;}<br>
+            });
+        </div>
+    </div>
+
+</body>
+
+</html>

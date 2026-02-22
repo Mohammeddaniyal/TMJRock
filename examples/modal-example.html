@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>TMJRock - Modal Component</title>
+
+    <script src="../src/tmjrock.js"></script>
+    <link rel="stylesheet" href="../src/tmjrock.css">
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p.desc {
+            margin-bottom: 25px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .section {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        button.demo-btn {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        button.demo-btn:hover {
+            background-color: #004494;
+        }
+
+        .code-preview {
+            background: #2d2d2d;
+            color: #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 13px;
+            margin-top: 20px;
+            overflow-x: auto;
+            line-height: 1.4;
+        }
+
+        .tag {
+            color: #e06c75;
+        }
+
+        .attr {
+            color: #d19a66;
+        }
+
+        .val {
+            color: #98c379;
+        }
+
+        /* Styles for the login form inside the modal */
+        .login-form input {
+            width: 90%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .login-form button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 95%;
+        }
+
+        #hookStatus {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #d73a49;
+        }
+    </style>
+
+    <script>
+        // Modal Trigger Functions
+        function showBasicModal() {
+            $$$.modals.show("basicModal");
+        }
+
+        function showLoginModal() {
+            $$$.modals.show("loginModal");
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            alert("Login submitted! (This is just a demo)");
+            return false;
+        }
+
+        // Modal Lifecycle Hook Functions
+        function abBeforeOpening() {
+            document.getElementById('hookStatus').innerText = "Status: beforeOpening hook fired! Returning true to allow opening.";
+            return true; // Must return true to allow the modal to open
+        }
+        function abOpened() {
+            console.log("Modal fully opened.");
+        }
+        function abBeforeClosing() {
+            return confirm("Are you sure you want to close this modal?"); // Demonstrates stopping a close action
+        }
+        function abClosed() {
+            document.getElementById('hookStatus').innerText = "Status: afterClosing hook fired. Modal is gone.";
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="tmj-navbar">
+        <a href="../index.html">Home</a>
+        <a href="ajax-example.html">AJAX</a>
+        <a href="modal-example.html" class="active">Modal</a>
+        <a href="accordion-example.html">Accordion</a>
+        <a href="fillcombo-example.html">fillComboBox</a>
+    </div>
+
+    <h1>TMJRock - Modal Component</h1>
+    <p class="desc">
+        The TMJRock Modal is a highly configurable, animated popup engine. It features built-in backdrop blurring,
+        custom sizing, dynamic headers and footers, and a complete set of JavaScript lifecycle hooks—all configured
+        declaratively via HTML attributes.
+    </p>
+
+    <div class="section">
+        <h3>Example 1: The Login Modal</h3>
+        <p>A clean, centered modal with a custom size, header, footer, and form content.</p>
+        <button class="demo-btn" type="button" onclick="showLoginModal()">Show Login Modal</button>
+
+        <div class="code-preview">
+            &lt;<span class="tag">div</span> <span class="attr">id</span>=<span class="val">"loginModal"</span> <span
+                class="attr">style</span>=<span class="val">"display:none"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">forModal</span>=<span class="val">"true"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">size</span>=<span class="val">"300x250"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">header</span>=<span class="val">"Account Login"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">footer</span>=<span class="val">"&amp;copy; 2026 Your
+                Company"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">closeButton</span>=<span class="val">"true"</span>&gt;<br>
+            &nbsp;&nbsp;... form content ...<br>
+            &lt;/<span class="tag">div</span>&gt;
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Example 2: Lifecycle Hooks & Custom Colors</h3>
+        <p>This modal demonstrates the <code>beforeOpening</code> and <code>beforeClosing</code> hooks. Try to close it,
+            and notice how it asks for confirmation first!</p>
+        <button class="demo-btn" type="button" onclick="showBasicModal()">Show Hook Modal</button>
+        <div id="hookStatus">Status: Waiting for action...</div>
+
+        <div class="code-preview">
+            &lt;<span class="tag">div</span> <span class="attr">id</span>=<span class="val">"basicModal"</span> <span
+                class="attr">style</span>=<span class="val">"display:none"</span> <span
+                class="attr">forModal</span>=<span class="val">"true"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">modalBackgroundColor</span>=<span
+                class="val">"#f0f8ff"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">beforeOpening</span>=<span
+                class="val">"abBeforeOpening()"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">beforeClosing</span>=<span
+                class="val">"abBeforeClosing()"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">afterClosing</span>=<span
+                class="val">"abClosed()"</span>&gt;<br>
+            &nbsp;&nbsp;... content ...<br>
+            &lt;/<span class="tag">div</span>&gt;
+        </div>
+    </div>
+
+
+    <div id="loginModal" style="display:none" forModal="true" size="300x250" header="Account Login"
+        footer="Secure connection" maskColor="linear-gradient(to bottom right, rgba(0,0,0,0.8), rgba(0,50,100,0.8))"
+        modalBackgroundColor="white" closeButton="true">
+
+        <form class="login-form" onsubmit="return handleLogin(event)">
+            <label>Username:</label><br />
+            <input type="text" name="username" required /><br />
+            <label>Password:</label><br />
+            <input type="password" name="password" required /><br />
+            <button type="submit">Log In</button>
+        </form>
+    </div>
+
+    <div id="basicModal" style="display:none" forModal="true" size="400x200" header="Lifecycle Hooks"
+        footer="Check the page text after closing" maskColor="rgba(0,0,0,0.6)" modalBackgroundColor="#b3d4ff"
+        closeButton="true" beforeOpening="abBeforeOpening()" afterOpening="abOpened()" beforeClosing="abBeforeClosing()"
+        afterClosing="abClosed()">
+
+        <h3 style="margin-top:0;">Hello!</h3>
+        <p>This modal has a custom light-blue background.</p>
+        <p>When you click the close button, the <code>beforeClosing</code> hook will trigger a standard browser
+            confirmation dialog before allowing the modal to actually close.</p>
+    </div>
+
+</body>
+
+</html>
