@@ -91,7 +91,7 @@
 
 /* Mobile Responsiveness Overrides */
 @media (max-width: 650px) {
-    .tmjrock_modal {
+    .tmjrock_modal { 
     
         width: 90% !important;
         min-width: 0 !important;
